@@ -132,8 +132,8 @@ static char *forge_request(char *method, char *url, char keep_alive, char **host
 		url = "/";
 
 	// total request size
-	len = strlen("GET HTTP/1.1\r\nHost: :65536\r\nConnection: keep-alive\r\n\r\n") + 1;
-    /*len += strlen(method);*/
+	len = strlen(" HTTP/1.1\r\nHost: :65536\r\nConnection: keep-alive\r\n\r\n") + 1;
+    len += strlen(method);
 	len += strlen(*host);
 	len += strlen(url);
 
@@ -149,9 +149,8 @@ static char *forge_request(char *method, char *url, char keep_alive, char **host
 
 	req = W_MALLOC(char, len);
 
-	strcpy(req, "GET ");
-    /*strcat(req, " ");*/
-	strcat(req, url);
+	strcpy(req, method);
+    strcat(req, " ");
 	strcat(req, url);
 	strcat(req, " HTTP/1.1\r\nHost: ");
 	strcat(req, *host);
@@ -226,7 +225,7 @@ int main(int argc, char *argv[]) {
 	config.req_count = 0;
 	config.keep_alive = 0;
 
-	while ((c = getopt(argc, argv, ":hv6kn:t:c:H:")) != -1) {
+	while ((c = getopt(argc, argv, ":hv6kn:t:c:X:H:")) != -1) {
 		switch (c) {
 			case 'h':
 				show_help();
