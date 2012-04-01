@@ -31,8 +31,7 @@ def set_options(opt):
 
 def configure(conf):
 	conf.env['CCFLAGS'] += [
-		#'-std=gnu99', '-Wall', '-Wshadow', '-W', '-pedantic', '-g', '-g2', '-O2', '-Wmissing-declarations',
-		'-std=gnu99', '-Wall', '-Wshadow', '-W', '-pedantic', '-g', '-Wmissing-declarations',
+		'-std=gnu99', '-Wall', '-Wshadow', '-W', '-pedantic', '-g', '-g2', '-O2', '-Wmissing-declarations',
 		'-Wdeclaration-after-statement', '-Wno-pointer-sign', '-Wcast-align', '-Winline', '-Wsign-compare',
 		'-Wnested-externs', '-Wpointer-arith', '-Wbad-function-cast', '-Wmissing-prototypes',
 		'-fPIC', '-fno-strict-aliasing',
