@@ -20,6 +20,7 @@ static void show_help(void) {
 	printf("  -k       keep alive            (default: no)\n");
 	printf("  -6       use ipv6              (default: no)\n");
 	printf("  -H str   add header to request\n");
+	printf("  -X str   request method        (default: GET)\n");
 	printf("  -h       show help and exit\n");
 	printf("  -v       show version and exit\n\n");
 	printf("example: weighttpd -n 10000 -c 10 -t 2 -k -H \"User-Agent: foo\" localhost/index.html\n\n");
@@ -70,7 +71,7 @@ static struct addrinfo *resolve_host(char *hostname, uint16_t port, uint8_t use_
 	return res;
 }
 
-static char *forge_request(char *url, char keep_alive, char **host, uint16_t *port, char **headers, uint8_t headers_num) {
+static char *forge_request(char *method, char *url, char keep_alive, char **host, uint16_t *port, char **headers, uint8_t headers_num) {
 	char *c, *end;
 	char *req;
 	uint32_t len;
@@ -132,6 +133,7 @@ static char *forge_request(char *url, char keep_alive, char **host, uint16_t *po
 
 	// total request size
 	len = strlen("GET HTTP/1.1\r\nHost: :65536\r\nConnection: keep-alive\r\n\r\n") + 1;
+    /*len += strlen(method);*/
 	len += strlen(*host);
 	len += strlen(url);
 
@@ -148,6 +150,8 @@ static char *forge_request(char *url, char keep_alive, char **host, uint16_t *po
 	req = W_MALLOC(char, len);
 
 	strcpy(req, "GET ");
+    /*strcat(req, " ");*/
+	strcat(req, url);
 	strcat(req, url);
 	strcat(req, " HTTP/1.1\r\nHost: ");
 	strcat(req, *host);
@@ -197,6 +201,7 @@ int main(int argc, char *argv[]) {
 	Config config;
 	Worker *worker;
 	char *host;
+    char *method;
 	uint16_t port;
 	uint8_t use_ipv6;
 	uint16_t rest_concur, rest_req;
@@ -210,6 +215,7 @@ int main(int argc, char *argv[]) {
 
 	printf("weighttp - a lightweight and simple webserver benchmarking tool\n\n");
 
+    method = "GET";
 	headers = NULL;
 	headers_num = 0;
 
@@ -244,6 +250,9 @@ int main(int argc, char *argv[]) {
 			case 'c':
 				config.concur_count = atoi(optarg);
 				break;
+			case 'X':
+                method = optarg;
+                break;
 			case 'H':
 				headers = W_REALLOC(headers, char*, headers_num+1);
 				headers[headers_num] = optarg;
@@ -295,13 +304,13 @@ int main(int argc, char *argv[]) {
 		return 2;
 	}
 
-	if (NULL == (config.request = forge_request(argv[optind], config.keep_alive, &host, &port, headers, headers_num))) {
+	if (NULL == (config.request = forge_request(method, argv[optind], config.keep_alive, &host, &port, headers, headers_num))) {
 		return 1;
 	}
 
 	config.request_size = strlen(config.request);
-	//printf("Request (%d):\n==========\n%s==========\n", config.request_size, config.request);
-	//printf("host: '%s', port: %d\n", host, port);
+	printf("Request (%d):\n==========\n%s==========\n", config.request_size, config.request);
+	printf("host: '%s', port: %d\n", host, port);
 
 	/* resolve hostname */
 	if(!(config.saddr = resolve_host(host, port, use_ipv6))) {

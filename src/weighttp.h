@@ -24,7 +24,7 @@
 #include <sys/socket.h>
 #include <netdb.h>
 
-#include <ev.h>
+#include <libev/ev.h>
 #include <pthread.h>
 
 #define CLIENT_BUFFER_SIZE 32 * 1024

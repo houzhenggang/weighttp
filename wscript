@@ -31,7 +31,8 @@ def set_options(opt):
 
 def configure(conf):
 	conf.env['CCFLAGS'] += [
-		'-std=gnu99', '-Wall', '-Wshadow', '-W', '-pedantic', '-g', '-g2', '-O2', '-Wmissing-declarations',
+		#'-std=gnu99', '-Wall', '-Wshadow', '-W', '-pedantic', '-g', '-g2', '-O2', '-Wmissing-declarations',
+		'-std=gnu99', '-Wall', '-Wshadow', '-W', '-pedantic', '-g', '-Wmissing-declarations',
 		'-Wdeclaration-after-statement', '-Wno-pointer-sign', '-Wcast-align', '-Winline', '-Wsign-compare',
 		'-Wnested-externs', '-Wpointer-arith', '-Wbad-function-cast', '-Wmissing-prototypes',
 		'-fPIC', '-fno-strict-aliasing',
@@ -41,7 +42,7 @@ def configure(conf):
 
 	# check for libev
 	conf.check(lib='ev', uselib_store='ev', mandatory=True)
-	conf.check(header_name='ev.h', uselib='ev', mandatory=True)
+	conf.check(header_name='libev/ev.h', uselib='ev', mandatory=True)
 
 	# check for libpthread
 	conf.check(lib='pthread', uselib_store='pthread', mandatory=True)
