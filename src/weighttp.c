@@ -133,7 +133,7 @@ static char *forge_request(char *method, char *url, char keep_alive, char **host
 
 	// total request size
 	len = strlen(" HTTP/1.1\r\nHost: :65536\r\nConnection: keep-alive\r\n\r\n") + 1;
-    len += strlen(method);
+	len += strlen(method);
 	len += strlen(*host);
 	len += strlen(url);
 
@@ -150,7 +150,7 @@ static char *forge_request(char *method, char *url, char keep_alive, char **host
 	req = W_MALLOC(char, len);
 
 	strcpy(req, method);
-    strcat(req, " ");
+	strcat(req, " ");
 	strcat(req, url);
 	strcat(req, " HTTP/1.1\r\nHost: ");
 	strcat(req, *host);
@@ -200,7 +200,7 @@ int main(int argc, char *argv[]) {
 	Config config;
 	Worker *worker;
 	char *host;
-    char *method;
+	char *method;
 	uint16_t port;
 	uint8_t use_ipv6;
 	uint16_t rest_concur, rest_req;
@@ -214,7 +214,7 @@ int main(int argc, char *argv[]) {
 
 	printf("weighttp - a lightweight and simple webserver benchmarking tool\n\n");
 
-    method = "GET";
+	method = "GET";
 	headers = NULL;
 	headers_num = 0;
 
@@ -250,8 +250,8 @@ int main(int argc, char *argv[]) {
 				config.concur_count = atoi(optarg);
 				break;
 			case 'X':
-                method = optarg;
-                break;
+				method = optarg;
+				break;
 			case 'H':
 				headers = W_REALLOC(headers, char*, headers_num+1);
 				headers[headers_num] = optarg;
